@@ -27,8 +27,9 @@ export function handleTransfer(event: TransferEvent): void{
             token.description = description.toString();
             token.name = name.toString();
             token.externalURL = externalURI.toString();
-            token.ipfsURI = 'ipfs.io/ipfs' + ipfsHash + token.tokenURI;
-          }
+            token.ipfsURI = 'ipfs.io/ipfs/' + ipfsHash + token.tokenURI
+            }
+            
           const coven = value.get('coven');
             if(coven){
               let covenData = coven.toObject();
@@ -59,4 +60,10 @@ export function handleTransfer(event: TransferEvent): void{
   token.updatedAtTimeStamp = event.block.timestamp;
   token.owner = event.params.to.toHexString();
   token.save();
-  }
+  let user = User.load(event.params.to.toHexString())
+  if(!user){
+    user = new User(event.params.to.toHexString());
+    user.save();
+  }  
+
+}
